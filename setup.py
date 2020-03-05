@@ -50,7 +50,7 @@ setup(
     package_data=get_package_data('rangefilter2'),
     # include_package_data=True,
     setup_requires=['persiantools'],
-    install_requires=[],
+    install_requires=['persiantools'],
     python_requires='>=3.5',
     zip_safe=False,
     platforms='any',
