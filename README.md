@@ -1,8 +1,9 @@
 jalali-django-admin-rangefilter
 ========================
 
-jalali-django-admin-rangefilter app, add the filter by a custom date / datetime range on the admin UI. This is a multilingual daterange filter for django admin and it is inspired by django-admin-rangefilter.
-To see the jalali calendar, make sure request's LANGUAGE_CODE contains 'fa' ('fa' for Farsi).
+This is a multilingual date range filter for django admin and it is inspired by django-admin-rangefilter.
+
+To see the jalali calendar, make sure that request's LANGUAGE_CODE contains 'fa' ('fa' for Farsi).
 
 
 Requirements
@@ -36,10 +37,7 @@ Example:
 ```
 
 
-Example usage
--------------
-
-In admin
+Example usage in admin
 -------------
 
 ```python
