@@ -14,5 +14,5 @@ else:
 
 
 class RangeFilterConfig(AppConfig):
-    name = 'rangefilter'
+    name = 'rangefilter2'
     verbose_name = _('Range Filter')
