@@ -23,7 +23,7 @@ Example:
 ``pip install jalali-django-admin-rangefilter``
 
 
-Add ``rangefilter`` to ``INSTALLED_APPS``:
+Add ``rangefilter2`` to ``INSTALLED_APPS``:
 
 Example:
 
@@ -31,7 +31,7 @@ Example:
 
     INSTALLED_APPS = (
         ...
-        'rangefilter',
+        'rangefilter2',
         ...
     )
 ```
@@ -43,7 +43,7 @@ Example usage in admin
 ```python
 
     from django.contrib import admin
-    from rangefilter.filter import DateRangeFilter
+    from rangefilter2.filter import DateRangeFilter
 
     from .models import Post
 

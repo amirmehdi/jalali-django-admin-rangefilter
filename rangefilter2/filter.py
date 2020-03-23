@@ -62,15 +62,15 @@ class DateRangeFilter(admin.filters.FieldListFilter):
                     if key == self.lookup_kwarg_gte:
                         if self.locale is 'persian':
                             self.value1 = JalaliDate.fromtimestamp(
-                                ret).strftime("%Y/%m/%d")
+                                ret).strftime("%Y-%m-%d")
                         else:
-                            self.value1 = date.strftime("%Y/%m/%d")
+                            self.value1 = date.strftime("%Y-%m-%d")
                     else:
                         if self.locale is 'persian':
                             self.value2 = JalaliDate.fromtimestamp(
-                                ret).strftime("%Y/%m/%d")
+                                ret).strftime("%Y-%m-%d")
                         else:
-                            self.value2 = date.strftime("%Y/%m/%d")
+                            self.value2 = date.strftime("%Y-%m-%d")
                 except Exception as e:
                     continue
             else:
@@ -88,9 +88,6 @@ class DateRangeFilter(admin.filters.FieldListFilter):
             else:
                 value = default_tz.localize(value)
         return value
-
-    def queryset(self, request, queryset):
-        pass
 
     def choices(self, cl):
         yield {
@@ -110,11 +107,11 @@ class DateRangeFilter(admin.filters.FieldListFilter):
 
     def get_template(self):
         if django.VERSION[:2] <= (1, 8):
-            return 'rangefilter/date_filter_1_8.html'
+            return 'rangefilter2/date_filter_1_8.html'
         else:
             # if csp:
-            #    return 'rangefilter/date_filter_csp.html'
-            return 'rangefilter/date_filter.html'
+            #    return 'rangefilter2/date_filter_csp.html'
+            return 'rangefilter2/date_filter.html'
 
     template = property(get_template)
 
@@ -126,19 +123,24 @@ class DateRangeFilter(admin.filters.FieldListFilter):
         else:
             extension = ''
         js = (
-            'rangefilter/persian-date{}.js'.format(extension),
-            'rangefilter/persian-datepicker{}.js'.format(extension),
+            'rangefilter2/persian-date{}.js'.format(extension),
+            'rangefilter2/persian-datepicker{}.js'.format(extension),
         )
         css = {
             'all': (
-                'rangefilter/persian-datepicker{}.css'.format(extension)
+                'rangefilter2/persian-datepicker{}.css'.format(extension)
             )
         }
         return forms.Media(js=js, css=css)
 
     def queryset(self, request, queryset):
         try:
-            return queryset.filter(**self.used_parameters)
+            params = {}
+            if self.value1:
+                params[self.lookup_kwarg_gte] = self.value1
+            if self.value2:
+                params[self.lookup_kwarg_lte] = self.value2
+            return queryset.filter(**params)
         except (ValueError, ValidationError) as e:
             # Fields may raise a ValueError or ValidationError when converting
             # the parameters to the correct type.

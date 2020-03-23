@@ -33,18 +33,18 @@ msgstr "Von"
 msgid "To date"
 msgstr "Bis"
 
-#: templates/rangefilter/date_filter.html:2
-#: templates/rangefilter/date_filter_1_8.html:2
+#: templates/rangefilter2/date_filter.html:2
+#: templates/rangefilter2/date_filter_1_8.html:2
 #, python-format
 msgid "By %(filter_title)s"
 msgstr "Nach %(filter_title)s"
 
-#: templates/rangefilter/date_filter.html:133
-#: templates/rangefilter/date_filter_1_8.html:89
+#: templates/rangefilter2/date_filter.html:133
+#: templates/rangefilter2/date_filter_1_8.html:89
 msgid "Search"
 msgstr "Suchen"
 
-#: templates/rangefilter/date_filter.html:134
-#: templates/rangefilter/date_filter_1_8.html:90
+#: templates/rangefilter2/date_filter.html:134
+#: templates/rangefilter2/date_filter_1_8.html:90
 msgid "Reset"
 msgstr "Zurücksetzen"

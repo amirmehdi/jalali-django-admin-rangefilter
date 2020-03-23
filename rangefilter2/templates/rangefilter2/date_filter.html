@@ -2,19 +2,19 @@
 <h3>{% blocktrans with filter_title=title %}By {{ filter_title }}{% endblocktrans %}</h3>
 {% comment '' %}
 {% if debug %}
-    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter/persian-datepicker.css' %}">
-    <script type="text/javascript" src="{% static 'rangefilter/persian-date.js' %}"></script>
-    <script type="text/javascript" src="{% static 'rangefilter/persian-datepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter2/persian-datepicker.css' %}">
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-datepicker.js' %}"></script>
 {% else %}
-    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter/persian-datepicker.min.css' %}">
-    <script type="text/javascript" src="{% static 'rangefilter/persian-date.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'rangefilter/persian-datepicker.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter2/persian-datepicker.min.css' %}">
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-date.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-datepicker.min.js' %}"></script>
 {% endif %}
 {% endcomment %}
-    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter/persian-datepicker.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rangefilter2/persian-datepicker.css' %}">
     <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'rangefilter/persian-date.js' %}"></script>
-    <script type="text/javascript" src="{% static 'rangefilter/persian-datepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rangefilter2/persian-datepicker.js' %}"></script>
 <style>
     .admindatefilter .button, .admindatefilter input[type=submit], .admindatefilter input[type=button], .admindatefilter .submit-row input, .admindatefilter a.button,
     .admindatefilter .button, .admindatefilter input[type=reset] {
@@ -141,10 +141,10 @@ https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/templat
 </script>
 <div class="admindatefilter">
     <form method="GET" action="." id="{{ choices.0.system_name }}-form">
-        <input id="date_joined__gte" type="text" class="pDatePicker" {% if choices.0.date_start != None %} value="{{ choices.0.date_start|stringformat:'s' }}"{% endif %}/>
-        <input id="date_joined_start" name="date_joined__gte" type="hidden" class="pDatePicker"/>
-        <input id="date_joined__lte" type="text" class="pDatePicker" {% if choices.0.date_end != None %} value="{{ choices.0.date_end|stringformat:'s' }}"{% endif %}/>
-        <input id="date_joined_end" name="date_joined__lte" type="hidden" class="pDatePicker"/>
+        <input id="{{ choices.0.system_name }}__gte" type="text" class="pDatePicker" {% if choices.0.date_start != None %} value="{{ choices.0.date_start|stringformat:'s' }}"{% endif %}/>
+        <input id="{{ choices.0.system_name }}_start" name="{{ spec.lookup_kwarg_gte }}" type="hidden" class="pDatePicker"/>
+        <input id="{{ choices.0.system_name }}__lte" type="text" class="pDatePicker" {% if choices.0.date_end != None %} value="{{ choices.0.date_end|stringformat:'s' }}"{% endif %}/>
+        <input id="{{ choices.0.system_name }}_end" name="{{ spec.lookup_kwarg_lte}}" type="hidden" class="pDatePicker"/>
         {% for choice in choices %}
             <input type="hidden" id="{{ choice.system_name }}-query-string" value="{{ choice.query_string }}">
         {% endfor %}
@@ -157,7 +157,7 @@ https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/templat
 
 <script type="text/javascript">
   $(document).ready(function() {
-    $("#date_joined__lte").persianDatepicker({
+    $("#{{ choices.0.system_name }}__lte").persianDatepicker({
         "inline": false,
         "format": "DD/MM/YYYY",
         "viewMode": "day",
@@ -166,7 +166,7 @@ https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/templat
         "autoClose": true,
         "position": "auto",
         "altFormat": "unix",
-        "altField": "#date_joined_end",
+        "altField": "#{{ choices.0.system_name }}_end",
         "onlyTimePicker": false,
         "onlySelectOnDate": false,
         "calendarType": "{{ spec.locale }}",
@@ -251,7 +251,7 @@ https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/templat
     });
 
 
-    $("#date_joined__gte").persianDatepicker({
+    $("#{{ choices.0.system_name }}__gte").persianDatepicker({
         "inline": false,
         "format": "DD/MM/YYYY",
         "viewMode": "day",
@@ -260,7 +260,7 @@ https://github.com/django/django/blob/stable/1.10.x/django/contrib/admin/templat
         "autoClose": true,
         "position": "auto",
         "altFormat": "unix",
-        "altField": "#date_joined_start",
+        "altField": "#{{ choices.0.system_name }}_start",
         "onlyTimePicker": false,
         "onlySelectOnDate": false,
         "calendarType": "{{ spec.locale }}",

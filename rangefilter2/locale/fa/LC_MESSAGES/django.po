@@ -17,30 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-#: rangefilter/apps.py:11
+#: rangefilter2/apps.py:11
 msgid "Range Filter"
 msgstr ""
 
-#: rangefilter/filter.py:135 rangefilter/filter.py:184
+#: rangefilter2/filter.py:135 rangefilter2/filter.py:184
 msgid "From date"
 msgstr "از تاریخ"
 
-#: rangefilter/filter.py:141 rangefilter/filter.py:190
+#: rangefilter2/filter.py:141 rangefilter2/filter.py:190
 msgid "To date"
 msgstr "تا تاریخ"
 
-#: rangefilter/templates/rangefilter/date_filter.html:2
-#: rangefilter/templates/rangefilter/date_filter_1_8.html:2
+#: rangefilter2/templates/rangefilter2/date_filter.html:2
+#: rangefilter2/templates/rangefilter2/date_filter_1_8.html:2
 #, python-format
 msgid "By %(filter_title)s"
 msgstr "بر اساس %(filter_title)s"
 
-#: rangefilter/templates/rangefilter/date_filter.html:133
-#: rangefilter/templates/rangefilter/date_filter_1_8.html:89
+#: rangefilter2/templates/rangefilter2/date_filter.html:133
+#: rangefilter2/templates/rangefilter2/date_filter_1_8.html:89
 msgid "Search"
 msgstr "جستجو"
 
-#: rangefilter/templates/rangefilter/date_filter.html:134
-#: rangefilter/templates/rangefilter/date_filter_1_8.html:90
+#: rangefilter2/templates/rangefilter2/date_filter.html:134
+#: rangefilter2/templates/rangefilter2/date_filter_1_8.html:90
 msgid "Reset"
 msgstr "ریست"

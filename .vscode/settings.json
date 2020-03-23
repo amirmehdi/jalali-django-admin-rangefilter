@@ -3,7 +3,7 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./rangefilter",
+        "./rangefilter2",
         "-p",
         "test*.py"
     ],

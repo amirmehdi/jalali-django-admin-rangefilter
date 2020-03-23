@@ -16,7 +16,7 @@ settings.configure(
         'django.contrib.admin',
         'django.contrib.sessions',
         'django.contrib.messages',
-        'rangefilter',
+        'rangefilter2',
     ),
     DATABASES={
         'default': {'ENGINE': 'django.db.backends.sqlite3'}
@@ -53,4 +53,4 @@ settings.configure(
 django.setup()
 
 if __name__ == '__main__':
-    call_command('test', 'rangefilter')
+    call_command('test', 'rangefilter2')
