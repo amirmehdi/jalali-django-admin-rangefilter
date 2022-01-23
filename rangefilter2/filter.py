@@ -3,7 +3,12 @@
 from __future__ import unicode_literals
 
 import datetime
+
 import django
+from django.contrib.admin.options import IncorrectLookupParameters
+from django.core.exceptions import ValidationError
+
+DATE_PICKER_TIME_FORMAT = "%Y-%m-%d"
 
 try:
     import pytz
@@ -22,13 +27,11 @@ from persiantools.jdatetime import JalaliDate
 from django import forms
 from django.conf import settings
 from django.contrib import admin
-from django.utils.html import format_html
 from django.utils import timezone
 from django.template.defaultfilters import slugify
-from django.templatetags.static import StaticNode
 from django.utils.encoding import force_str
-from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
-from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
+from jalali_date.widgets import AdminSplitJalaliDateTime
+from jalali_date.fields import SplitJalaliDateTimeField
 
 if django.VERSION >= (2, 0, 0):
     from django.utils.translation import gettext_lazy as _
@@ -55,22 +58,13 @@ class DateRangeFilter(admin.filters.FieldListFilter):
         for key, value in temp.items():
             if value and key in [self.lookup_kwarg_gte, self.lookup_kwarg_lte]:
                 try:
-                    ret = int(value)/1000
+                    ret = int(value) / 1000
                     # if self.local
-                    date = datetime.datetime.fromtimestamp(ret)
-                    self.used_parameters[key] = str(date)
+                    self.used_parameters[key] = str(datetime.datetime.fromtimestamp(ret))
                     if key == self.lookup_kwarg_gte:
-                        if self.locale is 'persian':
-                            self.value1 = JalaliDate.fromtimestamp(
-                                ret).strftime("%Y-%m-%d")
-                        else:
-                            self.value1 = date.strftime("%Y-%m-%d")
+                        self.value1 = ret
                     else:
-                        if self.locale is 'persian':
-                            self.value2 = JalaliDate.fromtimestamp(
-                                ret).strftime("%Y-%m-%d")
-                        else:
-                            self.value2 = date.strftime("%Y-%m-%d")
+                        self.value2 = ret
                 except Exception as e:
                     continue
             else:
@@ -94,13 +88,19 @@ class DateRangeFilter(admin.filters.FieldListFilter):
             # slugify converts any non-unicode characters to empty characters
             # but system_name is required, if title converts to empty string use id
             # https://github.com/silentsokolov/django-admin-rangefilter/issues/18
-            'date_start': self.value1 or '',
-            'date_end': self.value2 or '',
+            'date_start': self.get_date_for_date_picker(self.value1) or '',
+            'date_end': self.get_date_for_date_picker(self.value1) or '',
             'system_name': force_str(slugify(self.title) if slugify(self.title) else id(self.title)),
             'query_string': cl.get_query_string(
                 {}, remove=self.expected_parameters()
             )
         }
+
+    def get_date_for_date_picker(self, ret):
+        if self.locale == 'persian':
+            return JalaliDate.fromtimestamp(ret).strftime(DATE_PICKER_TIME_FORMAT)
+        else:
+            datetime.datetime.fromtimestamp(ret).strftime(DATE_PICKER_TIME_FORMAT)
 
     def expected_parameters(self):
         return [self.lookup_kwarg_gte, self.lookup_kwarg_lte]
@@ -137,9 +137,9 @@ class DateRangeFilter(admin.filters.FieldListFilter):
         try:
             params = {}
             if self.value1:
-                params[self.lookup_kwarg_gte] = self.value1
+                params[self.lookup_kwarg_gte] = datetime.datetime.fromtimestamp(self.value1).strftime("%Y-%m-%d")
             if self.value2:
-                params[self.lookup_kwarg_lte] = self.value2
+                params[self.lookup_kwarg_lte] = datetime.datetime.fromtimestamp(self.value2).strftime("%Y-%m-%d")
             return queryset.filter(**params)
         except (ValueError, ValidationError) as e:
             # Fields may raise a ValueError or ValidationError when converting
