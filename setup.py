@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import re
 import io
-from os.path import join, dirname
+import os
+
 from setuptools import setup
-
-
-def get_version(package):
-    init_py = open(os.path.join(package, '__init__.py')).read()
-    return re.search('__version__ = [\'"]([^\'"]+)[\'"]', init_py).group(1)
 
 
 def get_packages(package):
@@ -28,6 +22,7 @@ def get_package_data(package):
                           for filename in filenames])
     return {package: filepaths}
 
+
 # use io.open until python2.7 support is dropped
 with io.open("README.md", encoding="utf8") as f:
     readme = f.read()
@@ -35,10 +30,9 @@ with io.open("README.md", encoding="utf8") as f:
 with io.open("CHANGELOG.md", encoding="utf8") as f:
     changelog = f.read()
 
-
 setup(
     name='jalali-django-admin-rangefilter',
-    version=get_version('rangefilter2'),
+    version='0.1.3',
     url='https://github.com/nshayanfar/jalali-django-admin-rangefilter',
     license='MIT',
     description='jalali-django-admin-rangefilter app, add the filter by a custom date range on the admin UI.',
