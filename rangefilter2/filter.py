@@ -8,8 +8,6 @@ import django
 from django.contrib.admin.options import IncorrectLookupParameters
 from django.core.exceptions import ValidationError
 
-DATE_PICKER_TIME_FORMAT = "%Y-%m-%d"
-
 try:
     import pytz
 except ImportError:
@@ -22,8 +20,6 @@ except ImportError:
 
 from collections import OrderedDict
 
-from persiantools.jdatetime import JalaliDate
-
 from django import forms
 from django.conf import settings
 from django.contrib import admin
@@ -32,11 +28,14 @@ from django.template.defaultfilters import slugify
 from django.utils.encoding import force_str
 from jalali_date.widgets import AdminSplitJalaliDateTime
 from jalali_date.fields import SplitJalaliDateTimeField
+import jdatetime
 
 if django.VERSION >= (2, 0, 0):
     from django.utils.translation import gettext_lazy as _
 else:
     from django.utils.translation import ugettext_lazy as _
+
+DATE_PICKER_TIME_FORMAT = "%Y-%m-%d"
 
 
 class DateRangeFilter(admin.filters.FieldListFilter):
@@ -88,19 +87,21 @@ class DateRangeFilter(admin.filters.FieldListFilter):
             # slugify converts any non-unicode characters to empty characters
             # but system_name is required, if title converts to empty string use id
             # https://github.com/silentsokolov/django-admin-rangefilter/issues/18
-            'date_start': self.get_date_for_date_picker(self.value1) or '',
-            'date_end': self.get_date_for_date_picker(self.value1) or '',
+            'date_start': self.get_date_for_date_picker(self.value1) if self.value1 else '',
+            'date_end': self.get_date_for_date_picker(self.value2) if self.value2 else '',
             'system_name': force_str(slugify(self.title) if slugify(self.title) else id(self.title)),
             'query_string': cl.get_query_string(
                 {}, remove=self.expected_parameters()
             )
         }
 
-    def get_date_for_date_picker(self, ret):
+    def get_date_for_date_picker(self, ret: int):
         if self.locale == 'persian':
-            return JalaliDate.fromtimestamp(ret).strftime(DATE_PICKER_TIME_FORMAT)
+            return jdatetime.datetime.fromtimestamp(ret, timezone.get_current_timezone()).strftime(
+                DATE_PICKER_TIME_FORMAT)
         else:
-            datetime.datetime.fromtimestamp(ret).strftime(DATE_PICKER_TIME_FORMAT)
+            return datetime.datetime.fromtimestamp(ret, timezone.get_current_timezone()).strftime(
+                DATE_PICKER_TIME_FORMAT)
 
     def expected_parameters(self):
         return [self.lookup_kwarg_gte, self.lookup_kwarg_lte]
@@ -137,9 +138,13 @@ class DateRangeFilter(admin.filters.FieldListFilter):
         try:
             params = {}
             if self.value1:
-                params[self.lookup_kwarg_gte] = datetime.datetime.fromtimestamp(self.value1).strftime("%Y-%m-%d")
+                params[self.lookup_kwarg_gte] = datetime.datetime \
+                    .fromtimestamp(self.value1, timezone.get_current_timezone()) \
+                    .strftime(DATE_PICKER_TIME_FORMAT)
             if self.value2:
-                params[self.lookup_kwarg_lte] = datetime.datetime.fromtimestamp(self.value2).strftime("%Y-%m-%d")
+                params[self.lookup_kwarg_lte] = datetime.datetime \
+                    .fromtimestamp(self.value2, timezone.get_current_timezone()) \
+                    .strftime(DATE_PICKER_TIME_FORMAT)
             return queryset.filter(**params)
         except (ValueError, ValidationError) as e:
             # Fields may raise a ValueError or ValidationError when converting
